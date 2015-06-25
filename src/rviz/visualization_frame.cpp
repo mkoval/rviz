@@ -123,6 +123,7 @@ VisualizationFrame::VisualizationFrame( QWidget* parent )
   , loading_( false )
   , post_load_timer_( new QTimer( this ))
   , frame_count_(0)
+  , using_standard_status_bar_(true)
 {
   panel_factory_ = new PanelFactory();
 
@@ -167,6 +168,12 @@ VisualizationFrame::~VisualizationFrame()
   delete panel_factory_;
 }
 
+void VisualizationFrame::setStatusBar( QStatusBar * statusbar )
+{
+  using_standard_status_bar_ = false;
+  QMainWindow::setStatusBar( statusbar );
+}
+
 void VisualizationFrame::setStatus( const QString & message )
 {
   Q_EMIT statusUpdate( message );
@@ -182,7 +189,10 @@ void VisualizationFrame::updateFps()
     float fps = frame_count_ / wall_diff.toSec();
     frame_count_ = 0;
     last_fps_calc_time_ = ros::WallTime::now();
-    fps_label_->setText( QString::number(int(fps)) + QString(" fps") );
+    if (using_standard_status_bar_)
+    {
+      fps_label_->setText( QString::number(int(fps)) + QString(" fps") );
+    }
   }
 }
 

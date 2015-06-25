@@ -75,6 +75,9 @@ public:
   VisualizationFrame( QWidget* parent = 0 );
   ~VisualizationFrame();
 
+  /** @brief override setStatusBar to know when it has been changed externally. */
+  void setStatusBar( QStatusBar * statusbar );
+
   /** @brief Call this @e before initialize() to have it take effect. */
   void setShowChooseNewMaster( bool show );
 
@@ -345,6 +348,8 @@ protected:
   ros::WallTime last_fps_calc_time_;
 
   QString error_message_; ///< Error message (if any) from most recent saveDisplayConfig() call.
+
+  bool using_standard_status_bar_;
 };
 
 }
